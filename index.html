@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeMarket - Premium Fashion & Fragrance Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e94560;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        nav {
+            background: #0f3460;
+            padding: 0.5rem 0;
+            margin-top: 70px;
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        nav a:hover, nav a.active {
+            background: #e94560;
+        }
+        
+        main {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            margin-top: 130px;
+        }
+        
+        .category-section {
+            margin-bottom: 3rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #1a1a2e;
+            border-left: 5px solid #e94560;
+            padding-left: 1rem;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a2e;
+        }
+        
+        .product-brand {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            color: #e94560;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.875rem;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            transform: scale(1.02);
+        }
+        
+        .whatsapp-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cart-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .cart-items {
+            margin-bottom: 1.5rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .cart-item-price {
+            color: #e94560;
+        }
+        
+        .remove-item {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .close-cart {
+            background: #666;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            
+            .category-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">LuxeMarket</div>
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-content">
+            <a href="#shoes" class="active">Shoes</a>
+            <a href="#shirts">Shirts</a>
+            <a href="#watches">Watches</a>
+            <a href="#perfumes">Perfumes</a>
+        </div>
+    </nav>
+    
+    <main>
+        <!-- SHOES SECTION -->
+        <section id="shoes" class="category-section">
+            <h2 class="category-title">Premium Shoes Collection</h2>
+            <div class="products-grid" id="shoesGrid"></div>
+        </section>
+        
+        <!-- SHIRTS SECTION -->
+        <section id="shirts" class="category-section">
+            <h2 class="category-title">Designer Shirts</h2>
+            <div class="products-grid" id="shirtsGrid"></div>
+        </section>
+        
+        <!-- WATCHES SECTION -->
+        <section id="watches" class="category-section">
+            <h2 class="category-title">Luxury Watches</h2>
+            <div class="products-grid" id="watchesGrid"></div>
+        </section>
+        
+        <!-- PERFUMES SECTION -->
+        <section id="perfumes" class="category-section">
+            <h2 class="category-title">Designer Perfumes</h2>
+            <div class="products-grid" id="perfumesGrid"></div>
+        </section>
+    </main>
+    
+    <!-- CART MODAL -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Your Cart</h2>
+                <button class="close-cart" onclick="toggleCart()">Close</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: ₦0</div>
+            <button class="checkout-btn" onclick="checkoutWhatsApp()">
+                Order via WhatsApp
+            </button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 LuxeMarket. All rights reserved.</p>
+        <p>Order via WhatsApp: +234 802 499 5261</p>
+    </footer>
+    
+    <script>
+        // Product Data
+        const products = {
+            shoes: [
+                {name: "Nike Air Max Red", price: 45000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800", brand: "Nike"},
+                {name: "Air Force 1 Low White", price: 42000, image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800", brand: "Nike"},
+                {name: "Nike Running Gray", price: 38000, image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800", brand: "Nike"},
+                {name: "Nike Athletic Green", price: 40000, image: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800", brand: "Nike"},
+                {name: "Maroon Plimsoll", price: 25000, image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800", brand: "Generic"},
+                {name: "Nike Black/White", price: 43000, image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800", brand: "Nike"},
+                {name: "Air Force 1 High", price: 46000, image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800", brand: "Nike"},
+                {name: "Nike Orange/White", price: 41000, image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800", brand: "Nike"},
+                {name: "Brown Nike Sneaker", price: 39000, image: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=800", brand: "Nike"},
+                {name: "New Balance Low", price: 35000, image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800", brand: "New Balance"},
+                {name: "Nike High-Top White", price: 44000, image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800", brand: "Nike"},
+                {name: "Nike White/Red", price: 42000, image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800", brand: "Nike"},
+                {name: "Converse All-Star", price: 28000, image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800", brand: "Converse"},
+                {name: "Nike Low-Top BW", price: 40000, image: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=800", brand: "Nike"},
+                {name: "OFF-WHITE x Nike", price: 85000, image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800", brand: "Nike"},
+                {name: "Air Force 1 Classic", price: 42000, image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800", brand: "Nike"},
+                {name: "White Low-Top", price: 30000, image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800", brand: "Generic"},
+                {name: "Nike White Athletic", price: 41000, image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800", brand: "Nike"},
+                {name: "Nike Low-Top White", price: 40000, image: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800", brand: "Nike"},
+                {name: "White/Green Stripe", price: 32000, image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800", brand: "Generic"},
+                {name: "Brown Leather Boot", price: 55000, image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800", brand: "Timberland"},
+                {name: "Brown Lace-Up", price: 48000, image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=800", brand: "Clarks"},
+                {name: "Leather Boots Brown", price: 52000, image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800", brand: "Dr. Martens"},
+                {name: "Yellow Doc Martens", price: 58000, image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800", brand: "Dr. Martens"},
+                {name: "Black Leather Boots", price: 60000, image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800", brand: "Timberland"}
+            ],
+            shirts: [
+                {name: "White Crew Neck", price: 12000, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800", brand: "H&M"},
+                {name: "Black Crew Neck", price: 12000, image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800", brand: "H&M"},
+                {name: "White V-Neck", price: 13000, image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=800", brand: "Zara"},
+                {name: "Black V-Neck", price: 13000, image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800", brand: "Zara"},
+                {name: "Long Sleeve White", price: 15000, image: "https://images.unsplash.com/photo-1620799140408-ed5341cd2431?w=800", brand: "Uniqlo"},
+                {name: "Checkered Dress Shirt", price: 18000, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800", brand: "Ralph Lauren"},
+                {name: "White Button-Up", price: 16000, image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800", brand: "Zara"},
+                {name: "Nike Polo Shirt", price: 20000, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800", brand: "Nike"},
+                {name: "Brown Jacket", price: 35000, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800", brand: "Levi's"},
+                {name: "Designer Print Tee", price: 14000, image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=800", brand: "Gucci"}
+            ],
+            watches: [
+                {name: "Apple Watch Sport", price: 180000, image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=800", brand: "Apple"},
+                {name: "Apple Watch Milanese", price: 220000, image: "https://images.unsplash.com/photo-1572569028738-411a197b8367?w=800", brand: "Apple"},
+                {name: "Luxury Analog Gold", price: 150000, image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800", brand: "Rolex"},
+                {name: "Classic Chronograph", price: 85000, image: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=800", brand: "Omega"},
+                {name: "Digital Casio", price: 25000, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800", brand: "Casio"},
+                {name: "Sports Watch Pro", price: 45000, image: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800", brand: "Garmin"},
+                {name: "Vintage Pocket Watch", price: 65000, image: "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=800", brand: "Antique"},
+                {name: "Smart Watch Black", price: 120000, image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800", brand: "Samsung"}
+            ],
+            perfumes: [
+                {name: "Chanel N°5 EDP", price: 85000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Chanel"},
+                {name: "Bleu de Chanel", price: 75000, image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800", brand: "Chanel"},
+                {name: "Dior Sauvage", price: 70000, image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=800", brand: "Dior"},
+                {name: "YSL Black Opium", price: 68000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "YSL"},
+                {name: "Tom Ford Black Orchid", price: 95000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Tom Ford"},
+                {name: "Gucci Bloom", price: 72000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Gucci"},
+                {name: "Versace Eros", price: 55000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Versace"},
+                {name: "CK One", price: 28000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Calvin Klein"},
+                {name: "Acqua di Gio", price: 65000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Armani"},
+                {name: "Jo Malone London", price: 58000, image: "https://images.unsplash.com/photo-1592942162538-18db96529a3b?w=800", brand: "Jo Malone"}
+            ]
+        };
+        
+        let cart = [];
+        
+        // Render Products
+        function renderProducts() {
+            renderCategory('shoes', products.shoes);
+            renderCategory('shirts', products.shirts);
+            renderCategory('watches', products.watches);
+            renderCategory('perfumes', products.perfumes);
+        }
+        
+        function renderCategory(category, items) {
+            const grid = document.getElementById(category + 'Grid');
+            grid.innerHTML = items.map((item, index) => `
+                <div class="product-card">
+                    <img src="${item.image}" alt="${item.name}" class="product-image" loading="lazy">
+                    <div class="product-info">
+                        <div class="product-brand">${item.brand}</div>
+                        <div class="product-name">${item.name}</div>
+                        <div class="product-price">₦${item.price.toLocaleString()}</div>
+                        <a href="https://wa.me/2348024995261?text=I want to order: ${encodeURIComponent(item.name)} - ₦${item.price.toLocaleString()}" 
+                           class="whatsapp-btn" target="_blank">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                            Order on WhatsApp
+                        </a>
+                        <button onclick="addToCart('${category}', ${index})" style="margin-top: 0.5rem; width: 100%; padding: 0.5rem; background: #1a1a2e; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cart Functions
+        function addToCart(category, index) {
+            const item = products[category][index];
+            cart.push(item);
+            updateCartCount();
+            alert(`${item.name} added to cart!`);
+        }
+        
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+            } else {
+                renderCart();
+                modal.style.display = 'flex';
+            }
+        }
+        
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                cartTotal.textContent = 'Total: ₦0';
+                return;
+            }
+            
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₦${item.price.toLocaleString()}</div>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${index})">Remove</button>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.textContent = `Total: ₦${total.toLocaleString()}`;
+        }
+        
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            renderCart();
+        }
+        
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            let message = 'I want to order:\n\n';
+            let total = 0;
+            
+            cart.forEach(item => {
+                message += `- ${item.name} (${item.brand}): ₦${item.price.toLocaleString()}\n`;
+                total += item.price;
+            });
+            
+            message += `\nTotal: ₦${total.toLocaleString()}`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/2348024995261?text=${encodedMessage}`, '_blank');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderProducts);
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                
+                document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
