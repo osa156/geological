@@ -1,0 +1,17 @@
+# Render blueprint — paste into render.com or include in repo root for auto-config
+services:
+  - type: web
+    name: callussd-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: AUTH_TOKEN
+        value: ""
+    plan: free
